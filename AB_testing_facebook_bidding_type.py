@@ -54,6 +54,7 @@ import matplotlib.pyplot as plt
 from scipy.stats import shapiro
 import scipy.stats as stats
 from statsmodels.stats.proportion import proportions_ztest
+import helper_functions as hf
 pd.set_option("display.max_columns", None)
 pd.set_option("display.max_rows", None)
 
@@ -66,7 +67,10 @@ df_A.head()
 # Test Group - Average Bidding
 df_B = pd.read_excel(r"C:\Users\TOSHIBA\Desktop\A-B TESTING\ab_testing_data.xlsx", sheet_name="Test Group")
 df_B.head()
-#df_B=df_B[["Impression","Click","Purchase","Earning"]]
+
+# Get rid of empty columns
+df_A=df_A[["Impression","Click","Purchase","Earning"]]
+df_B=df_B[["Impression","Click","Purchase","Earning"]]
 
 # describe
 df_A.describe()
@@ -132,14 +136,6 @@ plt.show()
  3. Check p-value and interpret the results
 """
 
-# Firstly, define a function for our hypotheses
-def hypothesis_test(choose_test):
-    pvalue = choose_test[1]
-    if pvalue < 0.05:
-        print("P-value = %.4f, so that H0 can be REJECTED!" % (pvalue))
-    else:
-        print("P-value = %.4f, so that H0 can NOT be REJECTED!" % (pvalue))
-
 # Now recall A and B we saved as pkl
 A = pd.read_pickle(r"C:\Users\TOSHIBA\Desktop\A-B TESTING\A.pkl")
 B = pd.read_pickle(r"C:\Users\TOSHIBA\Desktop\A-B TESTING\B.pkl")
@@ -161,8 +157,8 @@ B = pd.read_pickle(r"C:\Users\TOSHIBA\Desktop\A-B TESTING\B.pkl")
 # H1 : Normality assumption is not provided for this sample.
 """
 
-hypothesis_test(shapiro(A)) # P-value = 0.5891, so that H0 can NOT be REJECTED!
-hypothesis_test(shapiro(B)) # P-value = 0.1541, so that H0 can NOT be REJECTED!
+hf.hypothesis_test(shapiro(A)) # P-value = 0.5891, so that H0 can NOT be REJECTED!
+hf.hypothesis_test(shapiro(B)) # P-value = 0.1541, so that H0 can NOT be REJECTED!
 
 #Normality assumption is provided for both samples.
 
@@ -174,7 +170,7 @@ hypothesis_test(shapiro(B)) # P-value = 0.1541, so that H0 can NOT be REJECTED!
 # H1 : Variance homogeneity assumption is NOT provided.
 """
 
-hypothesis_test(stats.levene(A, B))  # P-value = 0.1083, so that H0 can NOT be REJECTED!
+hf.hypothesis_test(stats.levene(A, B))  # P-value = 0.1083, so that H0 can NOT be REJECTED!
 
 # Variance homogeneity assumption is provided.
 
@@ -186,7 +182,7 @@ hypothesis_test(stats.levene(A, B))  # P-value = 0.1083, so that H0 can NOT be R
 # H1: M1 != M2 ("There is a statistically significant difference between the Purchase averages of the two groups.")
 """
 
-hypothesis_test(stats.ttest_ind(A, B, equal_var=True)) # P-value = 0.3493, so that H0 can NOT be REJECTED!
+hf.hypothesis_test(stats.ttest_ind(A, B, equal_var=True)) # P-value = 0.3493, so that H0 can NOT be REJECTED!
 
 
 # Since there is no statistically significant difference between the two groups, the current system can be continued.
