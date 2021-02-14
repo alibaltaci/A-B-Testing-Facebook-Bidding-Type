@@ -18,6 +18,7 @@ def hypothesis_test(choose_test):
         print("P-value = %.4f, so that H0 can NOT be REJECTED!" % (pvalue))
 
 
+
 # Conversion Rate
 def conversion_rate(col1, col2):
     """
