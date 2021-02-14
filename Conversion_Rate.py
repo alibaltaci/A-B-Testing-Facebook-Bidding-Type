@@ -48,6 +48,8 @@ hf.conversion_rate(df_B["Purchase"], df_B["Impression"]) # 0.004922002820825441
 
 ## Check for a statistical difference using the Z-Test.
 
+# https://www.statsmodels.org/stable/generated/statsmodels.stats.proportion.proportions_ztest.html
+
 # Hypothesis Definitions
 """
 H0 : (M1 = M2) There is NO statistically significant difference between the conversion rates of the control and test groups.
